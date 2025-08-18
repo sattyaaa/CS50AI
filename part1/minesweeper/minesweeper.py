@@ -251,11 +251,17 @@ class MinesweeperAI():
             for j in range(cell[1]-1, cell[1]+2):
                 if (i, j) == cell:
                     continue
-                if 0<=i<self.height and 0<=j<self.width:
-                    if (i, j) in self.mines:
-                        count -=1
-                    elif (i, j) not in self.safes:
-                        neighboures.add((i, j))
+
+                if (i, j) in self.safes:
+                    continue
+
+                if (i, j) in self.mines:
+                    count = count - 1
+                    continue
+
+                if 0 <= i < self.height and 0 <= j < self.width:
+                    neighboures.add((i, j))
+
         return neighboures, max(count, 0)
 
     def make_safe_move(self):
