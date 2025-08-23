@@ -48,7 +48,7 @@ def crawl(directory):
     return pages
 
 
-def transition_model(corpus, page, damping_factor):
+def transition_model(corpus: dict, page, damping_factor):
     """
     Return a probability distribution over which page to visit next,
     given a current page.
@@ -57,7 +57,20 @@ def transition_model(corpus, page, damping_factor):
     linked to by `page`. With probability `1 - damping_factor`, choose
     a link at random chosen from all pages in the corpus.
     """
-    raise NotImplementedError
+    distribution = {}
+    N = len(corpus)
+    links = corpus[page]
+
+    for p in corpus:
+        distribution[p] = (1-damping_factor)/N
+        
+        if links:
+            if p in links:
+                distribution[p]+= damping_factor/len(links)
+        else:
+            distribution[p]+=damping_factor/N
+        
+    return distribution
 
 
 def sample_pagerank(corpus, damping_factor, n):
@@ -69,7 +82,21 @@ def sample_pagerank(corpus, damping_factor, n):
     their estimated PageRank value (a value between 0 and 1). All
     PageRank values should sum to 1.
     """
-    raise NotImplementedError
+
+    pageRank = {name:0 for name in corpus}
+    page = random.choice(list(corpus.keys()))
+    pageRank[page]+=1
+
+    for _ in range(n-1):
+        transition = transition_model(corpus, page, damping_factor)
+        
+        page = random.choices(list(transition.keys()),weights= list(transition.values()), k = 1)[0]
+        
+        pageRank[page]+=1
+
+    return {name:pageRank[name]/n for name in pageRank}
+
+    
 
 
 def iterate_pagerank(corpus, damping_factor):
@@ -81,7 +108,31 @@ def iterate_pagerank(corpus, damping_factor):
     their estimated PageRank value (a value between 0 and 1). All
     PageRank values should sum to 1.
     """
-    raise NotImplementedError
+    N = len(corpus)
+    pageRank = {page: 1 / N for page in corpus}
+
+    while True:
+        newRanks = {}
+        for page in corpus:
+            # Base probability
+            rank = (1 - damping_factor) / N
+
+            # Contributions from all other pages
+            for i, links in corpus.items():
+                if len(links) == 0:
+                    # Dangling page: distribute evenly
+                    rank += damping_factor * (pageRank[i] / N)
+                elif page in links:
+                    # Normal incoming link
+                    rank += damping_factor * (pageRank[i] / len(links))
+
+            newRanks[page] = rank
+
+        # Check convergence in one line
+        if all(abs(newRanks[p] - pageRank[p]) < 0.001 for p in corpus):
+            return newRanks
+
+        pageRank = newRanks
 
 
 if __name__ == "__main__":
