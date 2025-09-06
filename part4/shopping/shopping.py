@@ -59,7 +59,41 @@ def load_data(filename):
     labels should be the corresponding list of labels, where each label
     is 1 if Revenue is true, and 0 otherwise.
     """
-    raise NotImplementedError
+
+    month = {
+        "Jan": 0,
+        "Feb": 1,
+        "Mar": 2,
+        "Apr": 3,
+        "May": 4,
+        "June": 5,
+        "Jul": 6,
+        "Aug": 7,
+        "Sep": 8,
+        "Oct": 9,
+        "Nov": 10,
+        "Dec": 11
+    }
+
+    converters = [int, float, int, float, int, float, float, float, float, float,
+        lambda x: month[x],
+        int, int, int, int,
+        lambda x: 1 if x=="Returning_Visitor" else 0,
+        lambda x: 1 if x=="TRUE" else 0
+    ]
+    
+    evidence = []
+    labels = []
+
+    with open(filename) as f:
+        reader = csv.reader(f)
+        next(reader)
+        for row in reader:
+            evidence.append([func(val) for func, val in zip(converters, row[:-1])])
+
+            labels.append(1 if row[-1] == "TRUE" else 0)
+
+    return evidence, labels
 
 
 def train_model(evidence, labels):
@@ -67,7 +101,12 @@ def train_model(evidence, labels):
     Given a list of evidence lists and a list of labels, return a
     fitted k-nearest neighbor model (k=1) trained on the data.
     """
-    raise NotImplementedError
+    
+    model = KNeighborsClassifier(n_neighbors=1)
+
+    model.fit(evidence, labels)
+
+    return model
 
 
 def evaluate(labels, predictions):
@@ -85,7 +124,16 @@ def evaluate(labels, predictions):
     representing the "true negative rate": the proportion of
     actual negative labels that were accurately identified.
     """
-    raise NotImplementedError
+    true_positive = sum(1 for actual, pred in zip(labels, predictions) if actual == 1 and pred == 1)
+    true_negative = sum(1 for actual, pred in zip(labels, predictions) if actual == 0 and pred == 0)
+
+    total_positive = sum(1 for actual in labels if actual == 1)
+    total_negative = sum(1 for actual in labels if actual == 0)
+
+    sensitivity = true_positive / total_positive if total_positive else 0
+    specificity = true_negative / total_negative if total_negative else 0
+
+    return sensitivity, specificity
 
 
 if __name__ == "__main__":
