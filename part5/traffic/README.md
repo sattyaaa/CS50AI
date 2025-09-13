@@ -1,4 +1,5 @@
-![Data Set](https://cdn.cs50.net/ai/2023/x/projects/5/gtsrb.zip)  
+[Download Data Set](https://cdn.cs50.net/ai/2023/x/projects/5/gtsrb.zip)
+
 
 ---
 
@@ -54,6 +55,4 @@ During the development of my Convolutional Neural Network (CNN) model for image 
 - Simply adding dense layers before the output may not always help and can sometimes slightly reduce performance.
 - Increasing the number of filters in the initial layer alone is not enough; the model benefits more from additional depth and hierarchical feature learning.
 - The model achieves a good balance of speed and accuracy with 2–3 convolutional blocks followed by flattening and a single dense layer.
-
----
 
