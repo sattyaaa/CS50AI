@@ -9,6 +9,18 @@ Official course website: [cs50.harvard.edu/ai/2024](https://cs50.harvard.edu/ai/
 
 ### Week 0: Search
 * **Degrees:** Found the shortest actor connection path using Breadth-First Search.
+
+    ```
+    $ python degrees.py large
+    Loading data...
+    Data loaded.
+    Name: Emma Watson
+    Name: Jennifer Lawrence
+    3 degrees of separation.
+    1: Emma Watson and Brendan Gleeson starred in Harry Potter and the Order of the Phoenix
+    2: Brendan Gleeson and Michael Fassbender starred in Trespass Against Us
+    3: Michael Fassbender and Jennifer Lawrence starred in X-Men: First Class
+    ```
 * **Tic-Tac-Toe:** Built an unbeatable AI player using the Minimax algorithm.
 
 ### Week 1: Knowledge
