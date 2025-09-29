@@ -1,65 +1,40 @@
 # CS50's Introduction to Artificial Intelligence Projects
 
-This repository contains my solutions for the projects from Harvard University's **CS50's Introduction to Artificial Intelligence with Python** course. Each project is designed to explore and implement fundamental concepts in AI and machine learning.
-
-For more information, visit the [official course website](https://cs50.harvard.edu/ai/2024/).
+My solutions for Harvard's CS50AI course.
+Official course website: [cs50.harvard.edu/ai/2024](https://cs50.harvard.edu/ai/2024/)
 
 ---
 
-## 🤖 Projects Overview
-
-The projects are organized by week, with each week focusing on a core area of artificial intelligence.
+## 🤖 Projects
 
 ### Week 0: Search
-
-| Project | Description | Key Concepts |
-| :--- | :--- | :--- |
-| **Degrees** | Found the shortest path between two actors via their movie connections. | Breadth-First Search (BFS), Graph Traversal |
-| **Tic-Tac-Toe** | Developed an AI that plays Tic-Tac-Toe optimally using the minimax algorithm. | Game Theory, Minimax, Alpha-Beta Pruning |
+* **Degrees:** Found the shortest actor connection path using Breadth-First Search.
+* **Tic-Tac-Toe:** Built an unbeatable AI player using the Minimax algorithm.
 
 ### Week 1: Knowledge
-
-| Project | Description | Key Concepts |
-| :--- | :--- | :--- |
-| **Knights** | Solved logic puzzles by representing knowledge using propositional logic. | Propositional Logic, Knowledge Representation |
-| **Minesweeper** | Created an AI agent that plays Minesweeper by making logical deductions. | Knowledge-Based Agents, Inference |
+* **Knights:** Solved logic puzzles using propositional logic.
+* **Minesweeper:** Created an AI to solve Minesweeper via logical inference.
 
 ### Week 2: Uncertainty
-
-| Project | Description | Key Concepts |
-| :--- | :--- | :--- |
-| **PageRank** | Implemented the PageRank algorithm to rank web pages based on link structure. | Markov Chains, Probability Distributions |
-| **Heredity** | Predicted the probability of genetic traits using Bayesian networks. | Bayesian Networks, Conditional Probability |
+* **PageRank:** Implemented the PageRank algorithm with Markov Chains.
+* **Heredity:** Predicted genetic traits using Bayesian Networks.
 
 ### Week 3: Optimization
-
-| Project | Description | Key Concepts |
-| :--- | :--- | :--- |
-| **Crossword** | Generated crossword puzzles by treating it as a constraint satisfaction problem. | Constraint Satisfaction, Backtracking Search |
+* **Crossword:** Generated crosswords using constraint satisfaction algorithms.
 
 ### Week 4: Learning
-
-| Project | Description | Key Concepts |
-| :--- | :--- | :--- |
-| **Shopping** | Built a model to predict whether online shoppers will complete a purchase. | Classification, k-Nearest Neighbors (k-NN) |
-| **Nim** | Trained an AI to master the game of Nim through reinforcement learning. | Reinforcement Learning, Q-Learning |
+* **Shopping:** Predicted customer purchases with a k-NN classification model.
+* **Nim:** Trained an AI to master the game of Nim via Q-learning.
 
 ### Week 5: Neural Networks
-
-| Project | Description | Key Concepts |
-| :--- | :--- | :--- |
-| **Traffic** | Built a neural network to classify traffic signs from a dataset of images. | Deep Learning, Convolutional Neural Networks (CNNs) |
+* **Traffic:** Classified traffic signs using a Convolutional Neural Network.
 
 ### Week 6: Language
-
-| Project | Description | Key Concepts |
-| :--- | :--- | :--- |
-| **Parser** | Implemented a program to parse sentences and extract noun phrases. | Natural Language Processing (NLP), Context-Free Grammar |
-| **Attention** | Built a missing `MASKED` word predicter and analized attention matrix. | NLP, Transformers, Attention Mechanism |
+* **Parser:** Implemented a program to parse sentences and extract noun phrases.
+* **Attention:** Built a MASKED word predicter and analized attention matrix.
 
 
 ---
-
 ## 🙏 Acknowledgments
 
 A huge thank you to **[Brian Yu](https://github.com/brianyu28)** and the entire **Harvard CS50 team** for creating this fantastic and challenging course.
