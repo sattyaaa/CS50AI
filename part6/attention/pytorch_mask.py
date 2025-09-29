@@ -1,10 +1,10 @@
 import sys
 import os
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
-import tensorflow as tf
+import torch
 
 from PIL import Image, ImageDraw, ImageFont
-from transformers import AutoTokenizer, TFBertForMaskedLM
+from transformers import AutoTokenizer, BertForMaskedLM
+from transformers.tokenization_utils_base import BatchEncoding
 
 # Pre-trained masked language model
 MODEL = "bert-base-uncased"
@@ -13,7 +13,13 @@ MODEL = "bert-base-uncased"
 K = 3
 
 # Constants for generating attention diagrams
-FONT = ImageFont.truetype("assets/fonts/OpenSans-Regular.ttf", 28)
+# Make sure this font path is correct for your environment
+try:
+    FONT = ImageFont.truetype("/content/attention/assets/fonts/OpenSans-Regular.ttf", 28)
+except IOError:
+    print("Font file not found. Using default font.")
+    FONT = ImageFont.load_default()
+    
 GRID_SIZE = 40
 PIXELS_PER_WORD = 200
 
@@ -21,41 +27,45 @@ PIXELS_PER_WORD = 200
 def main():
     text = input("Text: ")
 
-    # Tokenize input
+    # Tokenize input for PyTorch
     tokenizer = AutoTokenizer.from_pretrained(MODEL)
-    inputs = tokenizer(text, return_tensors="tf")
+    inputs = tokenizer(text, return_tensors="pt") # Changed "tf" to "pt"
     mask_token_index = get_mask_token_index(tokenizer.mask_token_id, inputs)
     if mask_token_index is None:
         sys.exit(f"Input must include mask token {tokenizer.mask_token}.")
 
-    # Use model to process input
-    model = TFBertForMaskedLM.from_pretrained(MODEL)
-    result = model(**inputs, output_attentions=True)
+    # Use PyTorch model to process input
+    model = BertForMaskedLM.from_pretrained(MODEL) # Changed from TFBertForMaskedLM
+    
+    # Put the model in evaluation mode
+    model.eval()
+
+    # Disable gradient calculations for inference
+    with torch.no_grad():
+        result = model(**inputs, output_attentions=True)
 
     # Generate predictions
     mask_token_logits = result.logits[0, mask_token_index]
-    top_tokens = tf.math.top_k(mask_token_logits, K).indices.numpy()
+    top_tokens = torch.topk(mask_token_logits, K).indices # Changed from tf.math.top_k
     for token in top_tokens:
-        print(text.replace(tokenizer.mask_token, tokenizer.decode([token])))
+        # .item() gets the integer value from a 0-dim tensor
+        print(text.replace(tokenizer.mask_token, tokenizer.decode([token.item()])))
 
     # Visualize attentions
-    visualize_attentions(inputs.tokens(), result.attentions)
+    tokens = tokenizer.convert_ids_to_tokens(inputs["input_ids"][0])
+    visualize_attentions(tokens, result.attentions)
 
 
-def get_mask_token_index(mask_token_id, inputs):
+def get_mask_token_index(mask_token_id, inputs: BatchEncoding):
     """
     Return the index of the token with the specified `mask_token_id`, or
     `None` if not present in the `inputs`.
     """
-    # TODO: Implement this function
-
-
+    # This function works for PyTorch tensors as well without modification
     for i, token_id in enumerate(inputs.input_ids[0]):
         if token_id == mask_token_id:
             return i
-        
     return None
-
 
 
 def get_color_for_attention_score(attention_score):
@@ -63,11 +73,9 @@ def get_color_for_attention_score(attention_score):
     Return a tuple of three integers representing a shade of gray for the
     given `attention_score`. Each value should be in the range [0, 255].
     """
-    # TODO: Implement this function
-    color = int(attention_score*255)
-
+    # This function is framework-agnostic
+    color = int(attention_score * 255)
     return color, color, color
-
 
 
 def visualize_attentions(tokens, attentions):
@@ -80,18 +88,21 @@ def visualize_attentions(tokens, attentions):
     include both the layer number (starting count from 1) and head number
     (starting count from 1).
     """
-    # TODO: Update this function to produce diagrams for all layers and heads.
-
-
     for i, layer in enumerate(attentions):
-        for k in range(len(layer[0])):
-            layer_number= i+1
-            head_number = k+1
+        # layer is a tensor of shape (batch_size, num_heads, seq_length, seq_length)
+        num_heads = layer.shape[1]
+        for k in range(num_heads):
+            layer_number = i + 1
+            head_number = k + 1
+            
+            # Detach tensor from graph and convert to numpy for PIL
+            attention_weights = layer[0, k].detach().numpy()
+
             generate_diagram(
-                layer_number, 
-                head_number, 
-                tokens, 
-                attentions[i][0][k]
+                layer_number,
+                head_number,
+                tokens,
+                attention_weights
             )
 
 
@@ -142,7 +153,19 @@ def generate_diagram(layer_number, head_number, tokens, attention_weights):
             draw.rectangle((x, y, x + GRID_SIZE, y + GRID_SIZE), fill=color)
 
     # Save image
-    img.save(f"Attention_Layer{layer_number}_Head{head_number}.png")
+    # 1. Define the folder you want to save into
+    output_folder = "attention_outputs"
+
+    # 2. Create the folder if it doesn't already exist
+    os.makedirs(output_folder, exist_ok=True)
+
+    # 3. Create the full path by joining the folder and filename
+    file_name = f"Attention_Layer{layer_number}_Head{head_number}.png"
+    full_path = os.path.join(output_folder, file_name)
+
+    # 4. Save the image to the full path
+    img.save(full_path)
+    print(f"Saved diagram to {full_path}")
 
 
 if __name__ == "__main__":
