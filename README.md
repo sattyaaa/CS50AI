@@ -62,7 +62,7 @@ The projects are organized by week, with each week focusing on a core area of ar
 
 ## 🙏 Acknowledgments
 
-A huge thank you to **Brian Yu** and the entire **Harvard CS50 team** for creating this fantastic and challenging course.
+A huge thank you to **[Brian Yu](https://github.com/brianyu28)** and the entire **Harvard CS50 team** for creating this fantastic and challenging course.
 
 ## ⚖️ Academic Honesty
 
