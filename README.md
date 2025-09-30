@@ -23,13 +23,77 @@ Official course website: [cs50.harvard.edu/ai/2024](https://cs50.harvard.edu/ai/
     ```
 * **Tic-Tac-Toe:** Built an unbeatable AI player using the Minimax algorithm.
 
+    ![alt text](images/TicTacToe.png)
+
 ### Week 1: Knowledge
 * **Knights:** Solved logic puzzles using propositional logic.
+
+    ```
+    python puzzle.py
+    Puzzle 0
+        A is a Knave
+    Puzzle 1
+        A is a Knave
+        B is a Knight
+    Puzzle 2
+        A is a Knave
+        B is a Knight
+    Puzzle 3
+        A is a Knight
+        B is a Knave
+        C is a Knight
+    ```
+
 * **Minesweeper:** Created an AI to solve Minesweeper via logical inference.
+
+    ![alt text](images/MineSweeper.png)
 
 ### Week 2: Uncertainty
 * **PageRank:** Implemented the PageRank algorithm with Markov Chains.
+
+    ```
+    $ python pagerank.py corpus0
+    PageRank Results from Sampling (n = 10000)
+    1.html: 0.2223
+    2.html: 0.4303
+    3.html: 0.2145
+    4.html: 0.1329
+    PageRank Results from Iteration
+    1.html: 0.2202
+    2.html: 0.4289
+    3.html: 0.2202
+    4.html: 0.1307
+    ```
+    
 * **Heredity:** Predicted genetic traits using Bayesian Networks.
+
+    ```
+    $ python heredity.py data/family0.csv
+    Harry:
+    Gene:
+        2: 0.0092
+        1: 0.4557
+        0: 0.5351
+    Trait:
+        True: 0.2665
+        False: 0.7335
+    James:
+    Gene:
+        2: 0.1976
+        1: 0.5106
+        0: 0.2918
+    Trait:
+        True: 1.0000
+        False: 0.0000
+    Lily:
+    Gene:
+        2: 0.0036
+        1: 0.0136
+        0: 0.9827
+    Trait:
+        True: 0.0000
+        False: 1.0000
+    ```
 
 ### Week 3: Optimization
 * **Crossword:** Generated crosswords using constraint satisfaction algorithms.
